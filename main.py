@@ -4,7 +4,7 @@ import python_practice.Sum as Sum
 
 while True:
     print("================================================================")
-    print("\nMenu:")
+    print("Menu:")
     print("1. Run Welcome Script\n2. Run Sum List Script\n3. Run FizzBuzz Script\n0. Exit")
     print("================================================================")
     choice = input("Enter your choice: ")

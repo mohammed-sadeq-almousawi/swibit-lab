@@ -5,10 +5,10 @@ class FizzBuzz:
     def run(self):
         for i in range(1, self.num + 1):
             if i % 3 == 0 and i % 5 == 0:
-                print("FizzBuzz")
+                print(f"{i}:FizzBuzz")
             elif i % 3 == 0:
-                print("Fizz")
+                print(f"{i}:Fizz")
             elif i % 5 == 0:
-                print("Buzz")
+                print(f"{i}:Buzz")
             else:
-                print(i)
+                print(f"{i}:None")
