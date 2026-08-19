@@ -1,6 +1,6 @@
 # Swibit Lab - Python & Backend Practice
 
-This is my Python practice and backend training project.
+This is my Python practice and backend training project, showcasing the progression from basic Python scripts to a fully containerized FastAPI backend system.
 
 ## Part 1: Python Practice Scripts
 It has a simple menu to run these programs:
@@ -16,39 +16,49 @@ python main.py
 
 ---
 
-## Part 2: FastAPI Backend Setup
-This section contains the backend server built with FastAPI. It includes a basic health check endpoint to verify the server is running correctly.
+## Part 2: FastAPI Backend API
+This section contains a robust backend RESTful API built with FastAPI. It features secure user authentication, database management, caching, and is fully containerized using Docker.
 
-### Prerequisites
-Make sure you have Python 3.11 or newer installed on your machine.
+### Key Features
+* **Authentication:** Secure user registration and login using JWT (JSON Web Tokens) and password hashing (bcrypt).
+* **Task Management (CRUD):** Users can securely create, read, update, and delete their own specific tasks.
+* **Data Isolation:** Complete data privacy ensuring users can only access and modify their own tasks.
+* **Database:** PostgreSQL integration using SQLAlchemy ORM.
+* **Caching:** Implemented Cache-Aside pattern using Redis to optimize the `GET /tasks` endpoint.
+* **Testing:** Comprehensive test suite using `pytest` covering authentication flows and data isolation.
+* **Containerization:** The entire application (API, PostgreSQL, Redis) is orchestrated using Docker Compose.
 
-### How to set up and run the server
+###  Tech Stack
+* **Framework:** FastAPI (Python 3.11)
+* **Database:** PostgreSQL
+* **ORM:** SQLAlchemy
+* **Cache:** Redis
+* **Authentication:** OAuth2 with JWT
+* **Deployment:** Docker & Docker Compose
+* **Testing:** Pytest & HTTPX
 
-**1. Create a Virtual Environment**
-Create an isolated environment to keep the project dependencies separate:
+### How to Run with Docker 
+You do not need to install databases locally; Docker handles everything.
+
+**1. Start the complete application stack:**
+Run this command from the `backend` directory to build and start the API, PostgreSQL, and Redis containers in the background:
 ```bash
-python -m venv venv
+docker compose up -d --build
 ```
 
-**2. Activate the Virtual Environment**
-* On Windows:
-  ```bash
-  .\venv\Scripts\activate
-  ```
-**3. Install Dependencies**
-Install FastAPI and Uvicorn:
+**2. Access the API:**
+Once the containers are running, open your browser and visit:
+* **Interactive API Docs (Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)
+* **ReDoc:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+###  Running the Tests
+To ensure everything is working correctly, you can run the automated test suite directly inside the running API container:
 ```bash
-pip install fastapi "uvicorn[standard]"
+docker compose exec api pytest test_main.py -v
 ```
 
-**4. Run the Server**
-Navigate to the `backend` folder and start the server with live reload:
+###  Stopping the Application
+To stop and safely remove the containers, run:
 ```bash
-cd backend
-uvicorn main:app --reload
+docker compose down
 ```
-
-**5. Test the API**
-Once the server is running, open your browser and visit:
-* **Health Check Endpoint:** [http://127.0.0.1:8000/health]
-* **Interactive API Docs (Swagger UI):** [http://127.0.0.1:8000/docs]
