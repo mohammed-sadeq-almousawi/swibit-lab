@@ -2,7 +2,16 @@ from fastapi import FastAPI
 import models
 from database import engine
 import routes
-import auth  
+import auth
+from loguru import logger
+
+
+logger.add(
+    "logs/backend.log",
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    rotation="1 MB",
+    serialize=True
+)
 
 models.Base.metadata.create_all(bind=engine)
 

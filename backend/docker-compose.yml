@@ -1,7 +1,13 @@
 version: '3.8'
 
 services:
- 
+  mongo:
+    image: mongo:latest
+    container_name: mongodb_audit
+    ports:
+        - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
   api:
     build: .
     container_name: fastapi_app
@@ -37,3 +43,4 @@ services:
 
 volumes:
   postgres_data:
+  mongo_data:

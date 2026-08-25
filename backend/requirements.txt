@@ -11,3 +11,6 @@ pydantic
 python-multipart
 pytest
 httpx
+pydantic-settings
+loguru
+motor

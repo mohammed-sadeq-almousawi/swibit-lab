@@ -1,0 +1,43 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file for testing
+        working-directory: ./backend
+        run: |
+          touch .env
+          echo "DATABASE_URL=${{ secrets.TEST_DB_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.TEST_SECRET_KEY }}" >> .env
+          echo "MONGO_URL=mongodb://mongo:27017" >> .env
+          echo "MONGO_DB_NAME=audit_log_db" >> .env
+
+      - name: Build and start Docker containers
+        working-directory: ./backend
+        run: docker compose up -d --build
+
+      - name: Wait for services to be ready
+        run: sleep 15
+
+      - name: Restart API
+        working-directory: ./backend
+        run: docker compose restart api
+
+      - name: Show API Logs (for debugging)
+        working-directory: ./backend
+        run: docker compose logs api
+
+      - name: Run Pytest
+        working-directory: ./backend
+        run: docker compose exec -T api pytest test_main.py -v
