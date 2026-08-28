@@ -1,25 +1,24 @@
 from fastapi import FastAPI
-import models
-from database import engine
-import routes
-import auth
-from loguru import logger
+from core.database import engine, Base
+from core.logging import setup_logging
 
 
-logger.add(
-    "logs/backend.log",
-    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
-    rotation="1 MB",
-    serialize=True
-)
+from features.auth import models as auth_models
+from features.tasks import models as tasks_models
 
-models.Base.metadata.create_all(bind=engine)
+from features.auth.routes import router as auth_router
+from features.tasks.routes import router as tasks_router
+
+
+setup_logging()
+
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-
-app.include_router(auth.router)
-app.include_router(routes.router)
+app.include_router(auth_router)
+app.include_router(tasks_router)
 
 @app.get("/health")
 def health_check():

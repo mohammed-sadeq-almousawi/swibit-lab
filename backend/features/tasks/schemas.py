@@ -13,10 +13,4 @@ class TaskResponse(TaskBase):
     id: int
     user_id: Optional[int] = None
 
-    
     model_config = ConfigDict(from_attributes=True)
-
-class UserCreate(BaseModel):
-    username: str
-    email: str
-    password: str
