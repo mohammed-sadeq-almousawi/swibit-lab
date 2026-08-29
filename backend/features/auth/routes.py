@@ -13,7 +13,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == form_data.username).first()
 
-    if not user or not services.verify_password(form_data.password, user.Password):
+    if not user or not services.verify_password(form_data.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -33,7 +33,7 @@ def register(user: schemas.UserCreate, background_tasks: BackgroundTasks, db: Se
         raise HTTPException(status_code=400, detail="Username already registered")
 
     hashed_pwd = services.get_password_hash(user.password)
-    new_user = models.User(username=user.username, email=user.email, Password=hashed_pwd)
+    new_user = models.User(username=user.username, email=user.email, password=hashed_pwd)
 
     db.add(new_user)
     db.commit()
