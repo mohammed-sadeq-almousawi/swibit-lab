@@ -9,6 +9,7 @@ from features.tasks import models as tasks_models
 from features.auth.routes import router as auth_router
 from features.tasks.routes import router as tasks_router
 
+from fastapi.middleware.cors import CORSMiddleware
 
 setup_logging()
 
@@ -16,6 +17,14 @@ setup_logging()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router)
 app.include_router(tasks_router)
