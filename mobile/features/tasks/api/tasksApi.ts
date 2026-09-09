@@ -1,11 +1,7 @@
 import { apiClient } from '../../../core/api/client';
+import { Task } from '../types/task.types';
 
-export interface Task {
-  id: number;
-  title: string;
-  desc: string | null;
-  done: boolean;
-}
+export type { Task } from '../types/task.types';
 
 export const getTasksApi = async (): Promise<Task[]> => {
   const response = await apiClient.get('/tasks/');
@@ -31,5 +27,10 @@ export const updateTaskApi = async (task: Task) => {
 
 export const deleteTaskApi = async (taskId: number) => {
   const response = await apiClient.delete(`/tasks/${taskId}`);
+  return response.data;
+};
+
+export const updateTask = async (id: number, title: string, desc: string | null) => {
+  const response = await apiClient.put(`/tasks/${id}`, { title, desc });
   return response.data;
 };

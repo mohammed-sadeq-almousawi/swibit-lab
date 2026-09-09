@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import { Redirect } from 'expo-router';
 import { useAuthStore } from '../core/store/useAuthStore';
+import { LoadingScreen } from '../shared/components/LoadingScreen';
 
 export default function Index() {
   const { token, checkAuth } = useAuthStore();
@@ -16,11 +16,7 @@ export default function Index() {
   }, []);
 
   if (!isReady) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#007bff" />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return token ? <Redirect href="/(main)/tasks" /> : <Redirect href="/auth/login" />;

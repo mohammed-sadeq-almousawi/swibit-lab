@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 
 interface AuthState {
   token: string | null;
+  username: string | null;
   isAuthenticated: boolean;
   login: (token: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -12,8 +13,19 @@ interface AuthState {
 
 const TOKEN_KEY = 'jwt_token';
 
+const decodeUsername = (token: string): string | null => {
+  try {
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded.sub || null;
+  } catch {
+    return null;
+  }
+};
+
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
+  username: null,
   isAuthenticated: false,
 
   login: async (newToken: string) => {
@@ -22,7 +34,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } else {
       localStorage.setItem(TOKEN_KEY, newToken);
     }
-    set({ token: newToken, isAuthenticated: true });
+    set({ token: newToken, username: decodeUsername(newToken), isAuthenticated: true });
   },
 
   logout: async () => {
@@ -31,7 +43,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } else {
       localStorage.removeItem(TOKEN_KEY);
     }
-    set({ token: null, isAuthenticated: false });
+    set({ token: null, username: null, isAuthenticated: false });
   },
 
   checkAuth: async () => {
@@ -43,9 +55,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
 
     if (token) {
-      set({ token, isAuthenticated: true });
+      set({ token, username: decodeUsername(token), isAuthenticated: true });
     } else {
-      set({ token: null, isAuthenticated: false });
+      set({ token: null, username: null, isAuthenticated: false });
     }
   },
 }));

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { QueryProvider } from '../core/api/QueryProvider';
 import { useAuthStore } from '../core/store/useAuthStore';
+import { LoadingScreen } from '../shared/components/LoadingScreen';
 import '../global.css';
 
 export default function RootLayout() {
@@ -26,13 +26,8 @@ export default function RootLayout() {
     }
   }, [token, segments, isReady]);
 
-
   if (!isReady) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (

@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
-import RegisterScreen from '../register';
+import { LoginForm } from '../components/LoginForm';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
 
 jest.mock('expo-router', () => ({
   router: { push: jest.fn(), replace: jest.fn() }
@@ -15,25 +14,23 @@ const Wrapper = ({ children }: any) => (
   </QueryClientProvider>
 );
 
-describe('RegisterScreen Component Tests', () => {
-  it('renders the register screen correctly', async () => {
-    await render(<RegisterScreen />, { wrapper: Wrapper });
+describe('LoginForm Component Tests', () => {
+  it('renders the login form correctly', async () => {
+    await render(<LoginForm />, { wrapper: Wrapper });
 
-    expect(screen.getByText('Create Account')).toBeTruthy();
+    expect(screen.getByText('Welcome Back')).toBeTruthy();
     expect(screen.getByPlaceholderText('Username')).toBeTruthy();
-    expect(screen.getByPlaceholderText('Email')).toBeTruthy();
     expect(screen.getByPlaceholderText('Password')).toBeTruthy();
   });
 
   it('updates input values when the user types', async () => {
-    await render(<RegisterScreen />, { wrapper: Wrapper });
+    await render(<LoginForm />, { wrapper: Wrapper });
 
-    const emailInput = screen.getByPlaceholderText('Email');
-    fireEvent.changeText(emailInput, 'test@example.com');
+    const usernameInput = screen.getByPlaceholderText('Username');
+    fireEvent.changeText(usernameInput, 'admin_user');
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText('Email').props.value).toBe('test@example.com');
+      expect(screen.getByPlaceholderText('Username').props.value).toBe('admin_user');
     });
   });
 });
-
